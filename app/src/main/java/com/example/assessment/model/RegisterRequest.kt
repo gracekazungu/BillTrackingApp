@@ -8,5 +8,4 @@ data class RegisterRequest(
     var email:String,
    @SerializedName("phone_number") var phoneNumber:String,
     var password:String,
-//    var confirmpassword:String
 )

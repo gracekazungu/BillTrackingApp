@@ -7,5 +7,5 @@ data class User(
     @SerializedName("last_name") var lastname:String,
     var email:String,
     @SerializedName("phone_number") var phoneNumber:String,
-    @SerializedName("user_Id") var userId: Int
+    @SerializedName("user_Id") var userId: String
 )
