@@ -4,6 +4,7 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="fontFamily">@font/gabriela</item>
+        <item name="android:textColor">@color/black</item>
     </style>
     <style name="Theme.Assessment" parent="Base.Theme.Assessment" />
 

@@ -6,30 +6,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.assessment.R
 import com.example.assessment.databinding.FragmentSummaryBinding
-
 import com.example.assessment.viewmodel.BillsViewModel
-
 
 class SummaryFragment : Fragment() {
     private var binding: FragmentSummaryBinding? = null
 
-
-    private lateinit var billsViewModel: BillsViewModel
+    private val billsViewModel: BillsViewModel by viewModels()
     private lateinit var adapter: BillAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        billsViewModel = ViewModelProvider(requireActivity()).get(BillsViewModel::class.java)
         adapter = BillAdapter(requireContext(), R.layout.item_bill, mutableListOf())
-
         binding?.listViewBills?.adapter = adapter
 
-        billsViewModel.getAllBills().observe(viewLifecycleOwner, Observer { bills ->
+        billsViewModel.getAllBills().observe(viewLifecycleOwner,
+            Observer{ bills ->
             adapter.clear()
             adapter.addAll(bills)
             adapter.notifyDataSetChanged()
@@ -59,15 +55,4 @@ class SummaryFragment : Fragment() {
         super.onDestroyView()
         binding = null
     }
-
 }
-
-
-
-
-
-
-
-
-
-

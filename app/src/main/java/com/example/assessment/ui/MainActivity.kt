@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
             binding.progressBar.visibility = View.GONE
         })
-        userViewModel.regLiveData.observe(this, Observer { regResponse ->
+        userViewModel.regLiveData.observe(this,
+            Observer { regResponse ->
             binding.progressBar.visibility = View.GONE
             Toast.makeText(this, regResponse.message, Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, LoginActivity::class.java))

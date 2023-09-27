@@ -23,6 +23,11 @@
     <string name="login_page">Login Page</string>
     <string name="billid">BillId</string>
     <string name="userid">UserId</string>
+    <string name="annual">ANNUAL</string>
+    <string name="weekly">WEEKLY</string>
+    <string name="monthly">MONTHLY</string>
+    <string name="quarterly">QUARTERLY</string>
+    <string name="upcoming_bills">Upcoming Bills</string>
     <string-array name="frequencies">
         <item>Weekly</item>
         <item>Monthly</item>

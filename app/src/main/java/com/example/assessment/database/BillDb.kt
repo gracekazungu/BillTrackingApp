@@ -5,10 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.assessment.model.Bill
+import com.example.assessment.model.UpcomingBill
 
-@Database(entities = [Bill::class], version = 1)
+@Database(entities = [Bill::class, UpcomingBill::class], version = 4)
 abstract class BillDb:RoomDatabase() {
     abstract fun billDao():BillDao
+
+    abstract fun upcomingBIllsDao():UpcomingBillsDao
 
     companion object{
         private var database:BillDb? = null
