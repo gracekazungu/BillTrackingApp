@@ -64,7 +64,8 @@ class UpcomingBillsFragment : Fragment(), onClickBill {
     }
 
     override fun onCheckBoxMarked(upcomingBill: UpcomingBill) {
-        upcomingBill.paid=true
+        upcomingBill.paid=!upcomingBill.paid
+        upcomingBill.synched=false
 
         billsViewModel.updateUpcomingBill(upcomingBill)
     }

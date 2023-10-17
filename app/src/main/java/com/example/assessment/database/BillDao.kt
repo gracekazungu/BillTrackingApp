@@ -13,11 +13,19 @@ interface BillDao {
     fun saveBill(bill: Bill)
 
 
+//    @Query("SELECT * FROM Bills ORDER BY dueDate")
+//    fun getAllBills(): LiveData<List<Bill>>
+
     @Query("SELECT * FROM BILLS WHERE frequency=:freq")
     fun getRecurringBills(freq:String):List<Bill>
 
-    @Query("SELECT * FROM Bills ORDER BY dueDate")
-    fun getAllBills(): LiveData<List<Bill>>
+    @Query("SELECT  * FROM Bills WHERE synched = 0")
+    fun getUnsynchedBills():List<Bill>
+
+
+
+
+
 
 //    @Query("SELECT * FROM Bills WHERE  billId=:billId")
 //    fun getBillById(billId:Int):LiveData<Bill>

@@ -1,13 +1,18 @@
 package com.example.assessment.repository
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.assessment.BillzApp
+import com.example.assessment.api.ApiClient
+import com.example.assessment.api.ApiInterface
 import com.example.assessment.database.BillDb
 import com.example.assessment.database.UpcomingBillsDao
 import com.example.assessment.model.Bill
+import com.example.assessment.model.BillsSummary
 import com.example.assessment.model.UpcomingBill
 import com.example.assessment.utils.Constants
 import com.example.assessment.utils.DateTimeUtils
@@ -19,6 +24,7 @@ class BillsRepository{
     private val db=BillDb.getDatabase(BillzApp.appContext)
     private val billDao=db.billDao()
     private val upcomingBillsDao=db.upcomingBIllsDao()
+    val apiClient = ApiClient.buildApiClient(ApiInterface::class.java)
 
 
     suspend fun saveBill(bill: Bill){
@@ -27,9 +33,9 @@ class BillsRepository{
         }
     }
 
-    fun getAllBills(): LiveData<List<Bill>> {
-        return billDao.getAllBills()
-    }
+//    fun getAllBills(): LiveData<List<Bill>> {
+//        return billDao.getAllBills()
+//    }
 
     suspend fun insertUpcomingBill(upcomingBill: UpcomingBill){
         withContext(Dispatchers.IO){
@@ -56,7 +62,8 @@ class BillsRepository{
                         frequency = bill.frequency,
                         dueDate = DateTimeUtils.createDateFromDay(bill.dueDate),
                         userId = bill.userId,
-                        paid = false
+                        paid = false,
+                        synched = false
                     )
                     upcomingBillsDao.insertUpcomingBill(newUpcomingBill)
                 }
@@ -82,7 +89,8 @@ class BillsRepository{
                         frequency = bill.frequency,
                         dueDate = DateTimeUtils.getDateOfWeekDay(bill.dueDate),
                         userId = bill.userId,
-                        paid = false
+                        paid = false,
+                        synched = false
                     )
                     upcomingBillsDao.insertUpcomingBill(newWeeklyBills)
                 }
@@ -117,7 +125,8 @@ class BillsRepository{
                                 frequency = bill.frequency,
                                 dueDate = DateTimeUtils.createDateFromDayAndMonth(dueDateAsInt, quarter * 3),
                                 userId = bill.userId,
-                                paid = false
+                                paid = false,
+                                synched = false
                             )
                             upcomingBillsDao.insertUpcomingBill(newQuarterlyBill)
                         }
@@ -149,7 +158,8 @@ class BillsRepository{
                     frequency = bill.frequency,
                     dueDate = "$currentYear-${bill.dueDate}",
                     userId = bill.userId,
-                    paid = false
+                    paid = false,
+                    synched = false
                 )
                 upcomingBillsDao.insertUpcomingBill(newAnnualBills)
             }
@@ -172,6 +182,79 @@ class BillsRepository{
 
     fun getPaidBills():LiveData<List<UpcomingBill>>{
         return upcomingBillsDao.getPaidBills()
+    }
+
+    fun getAuthToken():String{
+        val prefs= BillzApp.appContext
+            .getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE)
+        var token = prefs.getString(Constants.ACCESS_TOKEN,Constants.EMPTY_STRING)
+
+        token = "Bearer $token"
+        return token
+    }
+    suspend fun synchedBills(){
+        withContext(Dispatchers.IO){
+
+            var token = getAuthToken()
+            val unsynchedBills = billDao.getUnsynchedBills()
+            unsynchedBills.forEach { bill ->
+                val response= apiClient.postBill(token, bill)
+
+                if (response.isSuccessful){
+                    bill.synched = true
+                    billDao.saveBill(bill)
+                }
+            }
+        }
+    }
+    suspend fun synchedUpcomingBills(){
+        withContext(Dispatchers.IO){
+            var token = getAuthToken()
+            upcomingBillsDao.getUnsynchedUpcomingBills().forEach { upcomingBill ->
+                val response = apiClient.postUpcomingBill(token,upcomingBill)
+
+                if (response.isSuccessful){
+                    upcomingBill.synched = true
+                    upcomingBillsDao.updateUpcomingBill(upcomingBill)
+                }
+            }
+        }
+    }
+
+    suspend fun fetchRemoteBills(){
+        withContext(Dispatchers.IO){
+            val response = apiClient.fetchRemoteBills(getAuthToken())
+             if (response.isSuccessful){
+                 response.body()?.forEach { bill ->
+                     bill.synched=true
+                     billDao.saveBill(bill) }
+             }
+        }
+    }
+
+    suspend fun fetchRemoteUpcomingBills(){
+        withContext(Dispatchers.IO){
+            val response = apiClient.fetchRemoteUpcomingBills(getAuthToken())
+            if (response.isSuccessful){
+                response.body()?.forEach { upcomingBill ->
+                    upcomingBill.synched=true
+                    upcomingBillsDao.insertUpcomingBill(upcomingBill) }
+            }
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getMonthlySummary():LiveData<BillsSummary>{
+        return withContext(Dispatchers.IO){
+            val startDate = DateTimeUtils.getFirstDayOfMonth()
+            val endDate = DateTimeUtils.getLastDayOfMonth()
+            val today = DateTimeUtils.getDateToday()
+            val paid= upcomingBillsDao.getPaidMonthlyBillsSum(startDate, endDate)
+            val upcoming= upcomingBillsDao.getUpcomingBillsThisMonth(startDate, endDate, today)
+            val total = upcomingBillsDao.getTotalMonthlyBills(startDate, endDate)
+            val overdue = upcomingBillsDao.getOverdueBillsThisMonth(startDate,endDate,today)
+            val summary= BillsSummary(paid=paid, overdue= overdue, upcoming = upcoming, total = total)
+            MutableLiveData(summary)
+        }
     }
 }
 

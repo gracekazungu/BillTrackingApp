@@ -115,6 +115,11 @@ class DateTimeUtils {
             return formatDate(lastDay.atStartOfDay())
         }
 
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun getDateToday():String{
+            return formatDate(LocalDateTime.now())
+        }
     }
 
     }

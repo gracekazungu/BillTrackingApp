@@ -13,12 +13,13 @@ import com.example.assessment.databinding.ActivityLoginBinding
 import com.example.assessment.model.LoginRequest
 import com.example.assessment.model.LoginResponse
 import com.example.assessment.utils.Constants
+import com.example.assessment.viewmodel.BillsViewModel
 import com.example.assessment.viewmodel.UserViewModel
 
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
     val userViewModel: UserViewModel by viewModels()
-
+    val billsViewModel:BillsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -42,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
         })
         userViewModel.loginLiveData.observe(this, Observer { logResponse ->
             persistLogin(logResponse)
+            billsViewModel.fetchRemoteBills()
             binding.pblogin.visibility = View.GONE
             Toast.makeText(this, logResponse.message, Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, HomeActivity::class.java))
@@ -54,15 +56,15 @@ class LoginActivity : AppCompatActivity() {
 
     @SuppressLint("SuspiciousIndentation")
     fun validateLogin() {
-        val username = binding.etUsername.text.toString()
+//        val username = binding.etUsername.text.toString()
         val email = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
         var error = false
 
-        if (username.isBlank()) {
-            binding.tilUsername.error = "username is required"
-            error = true
-        }
+//        if (username.isBlank()) {
+//            binding.tilUsername.error = "username is required"
+//            error = true
+//        }
         if (email.isBlank()) {
             binding.tilEmail.error = "Email is required"
             error = true
@@ -92,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun clearErrors() {
-        binding.tilUsername.error = null
+//        binding.tilUsername.error = null
         binding.tilEmail.error = null
         binding.tilPassword.error = null
     }

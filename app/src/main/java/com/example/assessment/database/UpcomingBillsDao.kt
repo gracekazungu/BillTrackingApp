@@ -25,4 +25,20 @@ interface UpcomingBillsDao {
 
     @Query("SELECT * FROM UpcomingBills WHERE paid = :paid ORDER BY dueDate DESC")
     fun getPaidBills(paid: Boolean=true):LiveData<List<UpcomingBill>>
+
+    @Query("SELECT * FROM UpcomingBills WHERE synched = 0")
+    fun getUnsynchedUpcomingBills():List<UpcomingBill>
+
+
+    @Query("SELECT SUM(amount) FROM upcomingBills WHERE dueDate BETWEEN:startDate AND :endDate")
+    fun getTotalMonthlyBills(startDate: String, endDate: String):Double
+
+    @Query("SELECT SUM(amount) FROM upcomingBills WHERE paid=1 AND  dueDate BETWEEN:startDate AND :endDate")
+    fun getPaidMonthlyBillsSum(startDate: String, endDate: String):Double
+
+    @Query("SELECT SUM(amount) FROM upcomingBills WHERE paid=0 AND dueDate BETWEEN:startDate AND :endDate AND dueDate > :today")
+    fun getUpcomingBillsThisMonth(startDate: String,endDate: String,today:String):Double
+
+    @Query("SELECT SUM(amount) FROM upcomingBills WHERE paid=0 AND dueDate BETWEEN:startDate AND :endDate AND dueDate < :today")
+    fun getOverdueBillsThisMonth(startDate: String,endDate: String,today:String):Double
 }

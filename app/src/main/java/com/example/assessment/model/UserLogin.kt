@@ -1,10 +1,10 @@
 package com.example.assessment.model
 
-import com.google.gson.annotations.SerializedName
+import com.google.gson.annotations.Expose
 
 data class UserLogin(
-     var email:String,
-     var password: String,
+     @Expose var email:String,
+     @Expose var password: String,
 //    @SerializedName("user_id") var userId: String
 
 )

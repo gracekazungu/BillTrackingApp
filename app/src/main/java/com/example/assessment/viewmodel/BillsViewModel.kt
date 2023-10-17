@@ -3,15 +3,18 @@ package com.example.assessment.viewmodel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.assessment.model.Bill
+import com.example.assessment.model.BillsSummary
 import com.example.assessment.model.UpcomingBill
 import com.example.assessment.repository.BillsRepository
 import kotlinx.coroutines.launch
 
 class BillsViewModel:ViewModel() {
     private val billsRepo= BillsRepository()
+    val summaryLiveData= MutableLiveData<BillsSummary>()
 
     fun saveBill(bill: Bill){
         viewModelScope.launch {
@@ -23,19 +26,10 @@ class BillsViewModel:ViewModel() {
             billsRepo.insertUpcomingBill(upcomingBill)
         }
     }
-    fun getAllBills(): LiveData<List<Bill>> {
-        return billsRepo.getAllBills()
-    }
+//    fun getAllBills(): LiveData<List<Bill>> {
+//        return billsRepo.getAllBills()
+//    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun createRecurringBills(){
-        viewModelScope.launch {
-            billsRepo.createRecurringMonthlyBills()
-            billsRepo.createRecurringWeeklyBills()
-            billsRepo.createRecurringAnnuallyBills()
-            billsRepo.createRecurringQuarterlyBills()
-        }
-    }
     fun getUpcomingBillsByFrequency(freq:String):LiveData<List<UpcomingBill>>{
         return billsRepo.getUpcomingBillsByFrequency(freq)
     }
@@ -49,15 +43,20 @@ class BillsViewModel:ViewModel() {
     fun getPaidBills():LiveData<List<UpcomingBill>>{
         return billsRepo.getPaidBills()
     }
-//    fun getBillById(billId:Int):LiveData<Bill>{
-//        return billsRepo.getBillById(billId)
-//    }
-//
-//    fun deleteBill(bill: Bill) {
-//        viewModelScope.launch {
-//            billsRepo.deleteBillById(bill)
-//        }
-//    }
+
+    fun fetchRemoteBills(){
+        viewModelScope.launch {
+            billsRepo.fetchRemoteBills()
+            billsRepo.fetchRemoteUpcomingBills()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getMonthlySummary(){
+       viewModelScope.launch {
+           summaryLiveData.postValue(billsRepo.getMonthlySummary().value)
+       }
+    }
 
 
 }

@@ -143,13 +143,11 @@ class AddBillActivity : AppCompatActivity() {
                 frequency = frequency,
                 dueDate = dueDate,
                 billId = UUID.randomUUID().toString(),
-                userId = userId.toString()
+                userId = userId.toString(),
+                synched = false
             )
             billsViewModel.saveBill(newBill)
 
-            clearForm()
-            finish()
-            navigateToSummaryFragment()
         }
     }
 
@@ -161,13 +159,13 @@ class AddBillActivity : AppCompatActivity() {
         binding.spduedate.setSelection(0)
     }
 
-    private fun navigateToSummaryFragment() {
-        val fragment = SummaryFragment()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
+//    private fun navigateToSummaryFragment() {
+//        val fragment = SummaryFragment()
+//        val transaction = supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.fragment_container, fragment)
+//        transaction.addToBackStack(null)
+//        transaction.commit()
+//    }
 }
 
 fun View.show() {

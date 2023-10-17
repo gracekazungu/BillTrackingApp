@@ -1,8 +1,10 @@
 package com.example.assessment.ui
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import com.example.assessment.R
 import com.example.assessment.databinding.ActivityHomeBinding
 import com.example.assessment.viewmodel.BillsViewModel
@@ -10,11 +12,11 @@ import com.example.assessment.viewmodel.BillsViewModel
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private val billsViewModel: BillsViewModel by viewModels()
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        billsViewModel.createRecurringBills()
     }
 
     override fun onResume() {
