@@ -19,6 +19,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.btnbutton.setOnClickListener {
+            validateDetails()
+        }
+
+        binding.tvlogin.setOnClickListener {
+            val intent=Intent(this,LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
@@ -32,22 +40,22 @@ class MainActivity : AppCompatActivity() {
 
         userViewModel.errLiveData.observe(this, Observer { err ->
             Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, LoginActivity::class.java))
             binding.progressBar.visibility = View.GONE
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         })
         userViewModel.regLiveData.observe(this,
             Observer { regResponse ->
             binding.progressBar.visibility = View.GONE
-            Toast.makeText(this, regResponse.message, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, regResponse.message, Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, LoginActivity::class.java))
+                finish()
         })
-        binding.tvlogin.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
-//            val intent= Intent(this,LoginActivity::class.java)
-//            startActivity(intent)
-            finish()
-
-        }
+//        binding.tvlogin.setOnClickListener {
+//            startActivity(Intent(this, LoginActivity::class.java))
+////            finish()
+//
+//        }
     }
 
     fun validateDetails() {
@@ -100,6 +108,8 @@ class MainActivity : AppCompatActivity() {
             )
             binding.progressBar.visibility = View.VISIBLE
             userViewModel.registerUser(registerRequest)
+            val intent=Intent(this,MainActivity::class.java)
+            startActivity(intent)
 
         }
     }

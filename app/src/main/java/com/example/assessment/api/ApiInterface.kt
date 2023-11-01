@@ -22,7 +22,7 @@ interface ApiInterface {
    @POST("/bills")
    suspend fun postBill(@Header("Authorization") token: String,@Body bill: Bill):Response<Bill>
 
-   @POST("/upcoming_bills")
+   @POST("/upcoming-bills")
    suspend fun postUpcomingBill(@Header("Authorization") token: String, @Body upcomingBill: UpcomingBill):Response<UpcomingBill>
 
 

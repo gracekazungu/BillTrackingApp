@@ -14,7 +14,7 @@ class UpcomingBillsWorker(context: Context,workerParams: WorkerParameters):
     override suspend fun doWork(): Result {
         billsRepo.createRecurringWeeklyBills()
         billsRepo.createRecurringAnnuallyBills()
-        billsRepo.createRecurringQuarterlyBills()
+//        billsRepo.createRecurringQuarterlyBills()
         billsRepo.createRecurringMonthlyBills()
 
         return Result.success()

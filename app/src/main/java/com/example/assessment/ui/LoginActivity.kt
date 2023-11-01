@@ -24,6 +24,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.tvLogin.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
@@ -32,15 +36,7 @@ class LoginActivity : AppCompatActivity() {
         binding.btnbutton2.setOnClickListener {
             clearErrors()
             validateLogin()
-
         }
-
-        userViewModel.errLiveData.observe(this, Observer { err ->
-            Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
-            binding.pblogin.visibility = View.GONE
-        })
         userViewModel.loginLiveData.observe(this, Observer { logResponse ->
             persistLogin(logResponse)
             billsViewModel.fetchRemoteBills()
@@ -49,22 +45,26 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
         })
-        binding.tvLogin.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-        }
+
+        userViewModel.errLiveData.observe(this, Observer { err ->
+            Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
+//            startActivity(Intent(this, HomeActivity::class.java))
+//            finish()
+            binding.pblogin.visibility = View.GONE
+        })
+
+//        binding.tvLogin.setOnClickListener {
+//            startActivity(Intent(this, MainActivity::class.java))
+//        }
     }
 
     @SuppressLint("SuspiciousIndentation")
     fun validateLogin() {
-//        val username = binding.etUsername.text.toString()
         val email = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
         var error = false
 
-//        if (username.isBlank()) {
-//            binding.tilUsername.error = "username is required"
-//            error = true
-//        }
+
         if (email.isBlank()) {
             binding.tilEmail.error = "Email is required"
             error = true

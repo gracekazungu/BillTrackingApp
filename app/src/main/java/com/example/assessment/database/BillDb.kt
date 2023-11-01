@@ -14,7 +14,7 @@ abstract class BillDb:RoomDatabase() {
     abstract fun upcomingBIllsDao():UpcomingBillsDao
 
     companion object{
-        private var database:BillDb? = null
+        var database:BillDb? = null
         fun getDatabase(context: Context):BillDb{
             if (database==null){
                 database = Room

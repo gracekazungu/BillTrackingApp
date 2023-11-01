@@ -15,6 +15,9 @@ class SplashActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+//        throw RuntimeException("Bills has crashed here")
+
         redirectUser()
     }
 

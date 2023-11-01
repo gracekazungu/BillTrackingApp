@@ -35,7 +35,7 @@ class DateTimeUtils {
         @RequiresApi(Build.VERSION_CODES.O)
         fun getCurrentMonth(): String {
             val now = LocalDateTime.now()
-            return now.month.toString()
+            return now.month.value.toString()
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -85,35 +85,35 @@ class DateTimeUtils {
             val readableFormat=DateTimeFormatter.ofPattern("dd MMMM, yyyy")
             return readableFormat.format(dateToFormat)
         }
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun getQuarterStartDate(year: String, quarter: Int): String {
-            val yearInt = year.toInt()
-            val quarterStartMonth: Int = when (quarter) {
-                1 -> 1
-                2 -> 4
-                3 -> 7
-                4 -> 10
-                else -> throw IllegalArgumentException("Invalid quarter: $quarter")
-            }
-
-            val firstDay = LocalDate.of(yearInt, quarterStartMonth, 1)
-            return formatDate(firstDay.atStartOfDay())
-        }
-
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun getQuarterEndDate(year: String, quarter: Int): String {
-            val yearInt = year.toInt()
-            val quarterEndMonth: Int = when (quarter) {
-                1 -> 3
-                2 -> 6
-                3 -> 9
-                4 -> 12
-                else -> throw IllegalArgumentException("Invalid quarter: $quarter")
-            }
-
-            val lastDay = LocalDate.of(yearInt, quarterEndMonth, 1).withDayOfMonth(1).plusMonths(1).minusDays(1)
-            return formatDate(lastDay.atStartOfDay())
-        }
+//        @RequiresApi(Build.VERSION_CODES.O)
+//        fun getQuarterStartDate(year: String, quarter: Int): String {
+//            val yearInt = year.toInt()
+//            val quarterStartMonth: Int = when (quarter) {
+//                1 -> 1
+//                2 -> 4
+//                3 -> 7
+//                4 -> 10
+//                else -> throw IllegalArgumentException("Invalid quarter: $quarter")
+//            }
+//
+//            val firstDay = LocalDate.of(yearInt, quarterStartMonth, 1)
+//            return formatDate(firstDay.atStartOfDay())
+//        }
+//
+//        @RequiresApi(Build.VERSION_CODES.O)
+//        fun getQuarterEndDate(year: String, quarter: Int): String {
+//            val yearInt = year.toInt()
+//            val quarterEndMonth: Int = when (quarter) {
+//                1 -> 3
+//                2 -> 6
+//                3 -> 9
+//                4 -> 12
+//                else -> throw IllegalArgumentException("Invalid quarter: $quarter")
+//            }
+//
+//            val lastDay = LocalDate.of(yearInt, quarterEndMonth, 1).withDayOfMonth(1).plusMonths(1).minusDays(1)
+//            return formatDate(lastDay.atStartOfDay())
+//        }
 
 
         @RequiresApi(Build.VERSION_CODES.O)

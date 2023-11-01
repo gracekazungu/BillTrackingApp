@@ -3,6 +3,9 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
 
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+
 }
 
 android {
@@ -14,7 +17,7 @@ android {
         minSdk 24
         targetSdk 34
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,6 +44,7 @@ android {
 
     buildFeatures{
         viewBinding true
+        buildConfig true
     }
 }
 
@@ -50,8 +54,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.room:room-common:2.5.2'
-    implementation 'androidx.room:room-ktx:2.5.2'
+    implementation 'androidx.room:room-common:2.6.0'
+    implementation 'androidx.room:room-ktx:2.6.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -64,10 +68,14 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.8.0'
 
     implementation "androidx.fragment:fragment-ktx:1.6.1"
-    implementation "androidx.room:room-runtime:2.5.2"
-    kapt "androidx.room:room-compiler:2.5.2"
+    implementation "androidx.room:room-runtime:2.6.0"
+    kapt "androidx.room:room-compiler:2.6.0"
     implementation "androidx.work:work-runtime-ktx:2.8.1"
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.5'
 
+    implementation platform('com.google.firebase:firebase-bom:32.4.0')
+
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
 }

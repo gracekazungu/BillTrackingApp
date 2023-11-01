@@ -21,11 +21,10 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class BillsRepository{
-    private val db=BillDb.getDatabase(BillzApp.appContext)
-    private val billDao=db.billDao()
-    private val upcomingBillsDao=db.upcomingBIllsDao()
+    val db=BillDb.getDatabase(BillzApp.appContext)
+    val billDao=db.billDao()
+    val upcomingBillsDao=db.upcomingBIllsDao()
     val apiClient = ApiClient.buildApiClient(ApiInterface::class.java)
-
 
     suspend fun saveBill(bill: Bill){
         withContext(Dispatchers.IO){
@@ -100,43 +99,43 @@ class BillsRepository{
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun createRecurringQuarterlyBills() {
-        withContext(Dispatchers.IO) {
-            val quarterlyBills = billDao.getRecurringBills(Constants.QUARTERLY)
-            val currentYear = DateTimeUtils.getCurrentYear()
-
-            for (quarter in 1..4) {
-                val startDate = DateTimeUtils.getQuarterStartDate(currentYear, quarter)
-                val endDate = DateTimeUtils.getQuarterEndDate(currentYear, quarter)
-
-                quarterlyBills.forEach { bill ->
-                    val dueDateAsInt = bill.dueDate.toInt()
-
-                    if (dueDateAsInt in 1..31 && quarter * 3 in 1..12) {
-                        val existingBill = upcomingBillsDao.queryExistingBill(bill.billId, startDate, endDate)
-
-                        if (existingBill.isEmpty()) {
-                            val newQuarterlyBill = UpcomingBill(
-                                upcomingBillId = UUID.randomUUID().toString(),
-                                billId = bill.billId,
-                                name = bill.name,
-                                amount = bill.amount,
-                                frequency = bill.frequency,
-                                dueDate = DateTimeUtils.createDateFromDayAndMonth(dueDateAsInt, quarter * 3),
-                                userId = bill.userId,
-                                paid = false,
-                                synched = false
-                            )
-                            upcomingBillsDao.insertUpcomingBill(newQuarterlyBill)
-                        }
-                    } else {
-                        Log.e("BillsRepository", "Invalid day-of-month or month value for bill: ${bill.billId}")
-                    }
-                }
-            }
-        }
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    suspend fun createRecurringQuarterlyBills() {
+//        withContext(Dispatchers.IO) {
+//            val quarterlyBills = billDao.getRecurringBills(Constants.QUARTERLY)
+//            val currentYear = DateTimeUtils.getCurrentYear()
+//
+//            for (quarter in 1..4) {
+//                val startDate = DateTimeUtils.getQuarterStartDate(currentYear, quarter)
+//                val endDate = DateTimeUtils.getQuarterEndDate(currentYear, quarter)
+//
+//                quarterlyBills.forEach { bill ->
+//                    val dueDateAsInt = bill.dueDate.toInt()
+//
+//                    if (dueDateAsInt in 1..31 && quarter * 3 in 1..12) {
+//                        val existingBill = upcomingBillsDao.queryExistingBill(bill.billId, startDate, endDate)
+//
+//                        if (existingBill.isEmpty()) {
+//                            val newQuarterlyBill = UpcomingBill(
+//                                upcomingBillId = UUID.randomUUID().toString(),
+//                                billId = bill.billId,
+//                                name = bill.name,
+//                                amount = bill.amount,
+//                                frequency = bill.frequency,
+//                                dueDate = DateTimeUtils.createDateFromDayAndMonth(dueDateAsInt, quarter * 3),
+//                                userId = bill.userId,
+//                                paid = false,
+//                                synched = false
+//                            )
+//                            upcomingBillsDao.insertUpcomingBill(newQuarterlyBill)
+//                        }
+//                    } else {
+//                        Log.e("BillsRepository", "Invalid day-of-month or month value for bill: ${bill.billId}")
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
 
@@ -223,6 +222,7 @@ class BillsRepository{
 
     suspend fun fetchRemoteBills(){
         withContext(Dispatchers.IO){
+            val token = getAuthToken()
             val response = apiClient.fetchRemoteBills(getAuthToken())
              if (response.isSuccessful){
                  response.body()?.forEach { bill ->
@@ -243,7 +243,7 @@ class BillsRepository{
         }
     }
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getMonthlySummary():LiveData<BillsSummary>{
+    suspend fun getMonthlySummary():MutableLiveData<BillsSummary>{
         return withContext(Dispatchers.IO){
             val startDate = DateTimeUtils.getFirstDayOfMonth()
             val endDate = DateTimeUtils.getLastDayOfMonth()
@@ -256,6 +256,23 @@ class BillsRepository{
             MutableLiveData(summary)
         }
     }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    suspend fun getAnnualSummary(): MutableLiveData<BillsSummary> {
+//        return withContext(Dispatchers.IO) {
+//            val currentYear = DateTimeUtils.getCurrentYear()
+//            val startDate = "$currentYear-01-01"
+//            val endDate = "$currentYear-12-31"
+//            val today = DateTimeUtils.getDateToday() // You need to provide the 'today' parameter
+//            val paid = upcomingBillsDao.getPaidAnnualBillsSum(startDate, endDate)
+//            val upcoming = upcomingBillsDao.getUpcomingBillsThisYear(startDate, endDate)
+//            val total = upcomingBillsDao.getTotalAnnualBills(startDate, endDate)
+//            val overdue = upcomingBillsDao.getOverdueBillsThisYear(startDate, endDate, today)
+//            val summary = BillsSummary(paid = paid, overdue = overdue, upcoming = upcoming, total = total)
+//            MutableLiveData(summary)
+//        }
+//    }
+
+
 }
 
 

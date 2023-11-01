@@ -1,4 +1,4 @@
-package com.example.assessment.ui//package com.example.assessment.ui
+package com.example.assessment.ui
 
 
 import android.content.Context
@@ -44,7 +44,7 @@ class AddBillActivity : AppCompatActivity() {
 
     fun setupFreqSpinner() {
         val frequencies =
-            arrayOf(Constants.WEEKLY, Constants.MONTHLY, Constants.QUARTERLY, Constants.ANNUAL)
+            arrayOf(Constants.WEEKLY, Constants.MONTHLY,Constants.ANNUAL)
         val freqAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, frequencies)
         freqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spfrequency.adapter = freqAdapter
@@ -66,10 +66,10 @@ class AddBillActivity : AppCompatActivity() {
                         setUpDueDateSpinner(Array(31) { it + 1 })
                     }
 
-                    Constants.QUARTERLY -> {
-                        showSpinner()
-                        setUpDueDateSpinner(Array(31) { it + 1 })
-                    }
+//                    Constants.QUARTERLY -> {
+//                        showSpinner()
+//                        setUpDueDateSpinner(Array(31) { it + 1 })
+//                    }
 
                     Constants.ANNUAL -> {
                         showDatePicker()
@@ -147,6 +147,7 @@ class AddBillActivity : AppCompatActivity() {
                 synched = false
             )
             billsViewModel.saveBill(newBill)
+            clearForm()
 
         }
     }

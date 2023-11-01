@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+<!--</selector>-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:color="#0000FF" /> <!-- Green when checked -->
+    <item android:color="#000000" /> <!-- Blue for other states -->
+</selector>

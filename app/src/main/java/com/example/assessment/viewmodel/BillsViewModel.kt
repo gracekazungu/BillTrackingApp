@@ -13,7 +13,7 @@ import com.example.assessment.repository.BillsRepository
 import kotlinx.coroutines.launch
 
 class BillsViewModel:ViewModel() {
-    private val billsRepo= BillsRepository()
+    val billsRepo= BillsRepository()
     val summaryLiveData= MutableLiveData<BillsSummary>()
 
     fun saveBill(bill: Bill){
@@ -58,5 +58,12 @@ class BillsViewModel:ViewModel() {
        }
     }
 
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun getAnnualSummary() {
+//        viewModelScope.launch {
+//            val annualSummary = billsRepo.getAnnualSummary()
+//            summaryLiveData.postValue(annualSummary.value)
+//        }
+//    }
 
 }

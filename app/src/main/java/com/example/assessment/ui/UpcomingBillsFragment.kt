@@ -43,12 +43,12 @@ class UpcomingBillsFragment : Fragment(), onClickBill {
                 binding?.rvmonthly?.layoutManager=LinearLayoutManager(requireContext())
                 binding?.rvmonthly?.adapter=adapter
             }
-        billsViewModel.getUpcomingBillsByFrequency(Constants.QUARTERLY)
-            .observe(this){quarterlyBills->
-                val adapter = UpcomingBillsAdapter(quarterlyBills,this)
-                binding?.rvquartely?.layoutManager=LinearLayoutManager(requireContext())
-                binding?.rvquartely?.adapter=adapter
-            }
+//        billsViewModel.getUpcomingBillsByFrequency(Constants.QUARTERLY)
+//            .observe(this){quarterlyBills->
+//                val adapter = UpcomingBillsAdapter(quarterlyBills,this)
+//                binding?.rvquartely?.layoutManager=LinearLayoutManager(requireContext())
+//                binding?.rvquartely?.adapter=adapter
+//            }
 
         billsViewModel.getUpcomingBillsByFrequency(Constants.ANNUAL)
             .observe(this){annualBills->

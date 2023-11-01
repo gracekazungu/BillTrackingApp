@@ -1,5 +1,6 @@
 package com.example.assessment.utils
 
+import android.view.View
 import java.text.DecimalFormat
 
 class Utils {
@@ -9,5 +10,15 @@ class Utils {
 
             return fmt.format(amount)
         }
+
+        fun View.show() {
+            this.visibility = View.VISIBLE
+        }
+
+        fun View.hide() {
+            this.visibility = View.GONE
+        }
     }
+
+
 }
