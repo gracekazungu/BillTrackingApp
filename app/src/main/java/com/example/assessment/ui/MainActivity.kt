@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         setContentView(binding.root)
         binding.btnbutton.setOnClickListener {
-            clearErrors()
+//            clearErrors()
             validateDetails()
 
         }
@@ -114,14 +114,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun clearErrors() {
-        binding.tilusername.error = null
-        binding.tilLastName.error = null
-        binding.tilpassword.error = null
-        binding.tilemail.error = null
-        binding.tilphonenumber.error = null
-        binding.tilConfirmPassword.error = null
-    }
+//    fun clearErrors() {
+//        binding.tilusername.error = null
+//        binding.tilLastName.error = null
+//        binding.tilpassword.error = null
+//        binding.tilemail.error = null
+//        binding.tilphonenumber.error = null
+//        binding.tilConfirmPassword.error = null
+//    }
 }
 
 

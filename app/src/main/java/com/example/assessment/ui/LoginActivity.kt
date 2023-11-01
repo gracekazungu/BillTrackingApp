@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
         super.onResume()
         setContentView(binding.root)
         binding.btnbutton2.setOnClickListener {
-            clearErrors()
+//            clearErrors()
             validateLogin()
         }
         userViewModel.loginLiveData.observe(this, Observer { logResponse ->
@@ -93,9 +93,9 @@ class LoginActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    fun clearErrors() {
-//        binding.tilUsername.error = null
-        binding.tilEmail.error = null
-        binding.tilPassword.error = null
-    }
+//    fun clearErrors() {
+////        binding.tilUsername.error = null
+//        binding.tilEmail.error = null
+//        binding.tilPassword.error = null
+//    }
 }
